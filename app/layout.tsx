@@ -28,13 +28,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider dynamic>
+    <ClerkProvider>
       <html lang="en">
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
 
             <ConvexClientProvider>{children}</ConvexClientProvider>
+
         </body>
       </html>
     </ClerkProvider>
