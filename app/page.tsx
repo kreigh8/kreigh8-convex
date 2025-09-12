@@ -8,6 +8,7 @@ import {
 } from "convex/react";
 import { api } from "../convex/_generated/api";
 import Link from "next/link";
+import { FormEvent, useRef, useState } from "react";
 import { SignUpButton } from "@clerk/nextjs";
 import { SignInButton } from "@clerk/nextjs";
 import { UserButton } from "@clerk/nextjs";
@@ -17,18 +18,12 @@ export default function Home() {
     <>
       <header className="sticky top-0 z-10 bg-background p-4 border-b-2 border-slate-200 dark:border-slate-800 flex flex-row justify-between items-center">
         kreigh8
-        <UserButton />
       </header>
       <main className="p-8 flex flex-col gap-8">
         <h1 className="text-4xl font-bold text-center">
           kreigh8
         </h1>
-        <Authenticated>
-          <Content />
-        </Authenticated>
-        <Unauthenticated>
-          <SignInForm />
-        </Unauthenticated>
+        <Content />
       </main>
     </>
   );
@@ -57,7 +52,38 @@ function Content() {
     useQuery(api.myFunctions.listNumbers, {
       count: 10,
     }) ?? {};
+
+  const clients = useQuery(api.clients.listClients, {}) || [];
   const addNumber = useMutation(api.myFunctions.addNumber);
+
+  console.log('clients', clients)
+
+  const generateUploadUrl = useMutation(api.images.generateUploadUrl);
+  const sendImage = useMutation(api.clients.sendImage);
+
+  const imageInput = useRef<HTMLInputElement>(null);
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+
+  const [name] = useState(() => "User " + Math.floor(Math.random() * 10000));
+  async function handleSendImage(event: FormEvent) {
+    event.preventDefault();
+
+    // Step 1: Get a short-lived upload URL
+    const postUrl = await generateUploadUrl();
+    // Step 2: POST the file to the URL
+    const result = await fetch(postUrl, {
+      method: "POST",
+      headers: { "Content-Type": selectedImage!.type },
+      body: selectedImage,
+    });
+    const { storageId } = await result.json();
+    console.log('storageId', storageId);
+    // Step 3: Save the newly allocated storage id to the database
+    await sendImage({ storageId, author: name });
+
+    setSelectedImage(null);
+    imageInput.current!.value = "";
+  }
 
   if (viewer === undefined || numbers === undefined) {
     return (
@@ -70,6 +96,33 @@ function Content() {
   return (
     <div className="flex flex-col gap-8 max-w-lg mx-auto">
       <p>Welcome {viewer ?? "Anonymous"}!</p>
+
+      <ul>
+        {clients.map((client) => (
+          <li key={client._id}>
+            {client.format === "image" ? (
+              <ImageComponent client={client} />
+            ) : (
+              <span>{client.body}</span>
+            )}
+          </li>
+        ))}
+      </ul>
+
+      <form onSubmit={handleSendImage}>
+      <input
+        type="file"
+        accept="image/*"
+        ref={imageInput}
+        onChange={(event) => setSelectedImage(event.target.files![0])}
+        disabled={selectedImage !== null}
+      />
+      <input
+        type="submit"
+        value="Send Image"
+        disabled={selectedImage === null}
+      />
+    </form>
       <p>
         Click the button below and open this page in another window - this data
         is persisted in the Convex cloud database!
@@ -163,4 +216,11 @@ function ResourceCard({
       <p className="text-xs">{description}</p>
     </div>
   );
+}
+
+function ImageComponent({ client }: { client: { url?: string | null } }) {
+  if (!client.url) {
+    return <span>No image available</span>;
+  }
+  return <img alt={client.url} src={client.url} height="300px" width="auto" />;
 }
