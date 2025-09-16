@@ -5,6 +5,7 @@ import { Settings, User } from 'lucide-react'
 import SignInButton from './SignInButton'
 import Link from 'next/link'
 import { Button } from './ui/button'
+import { SignOutButton } from '@clerk/clerk-react'
 
 export default function Login() {
   return (
@@ -12,12 +13,16 @@ export default function Login() {
       <Authenticated>
         <div className="flex gap-2 justify-center items-center">
           <Link href="/admin">
-            <Button size="icon">
+            <Button size="icon" variant="outline">
               <Settings />
             </Button>
           </Link>
+          <SignOutButton>
+            <Button size="icon" variant="outline">
+              <User />
+            </Button>
+          </SignOutButton>
         </div>
-        <User />
       </Authenticated>
       <Unauthenticated>
         <SignInButton />
