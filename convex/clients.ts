@@ -2,7 +2,7 @@ import { v } from 'convex/values'
 import { query, mutation, internalAction } from './_generated/server'
 import { api } from './_generated/api'
 
-export const addClient = mutation({
+export const createClient = mutation({
   args: {
     name: v.string(),
     url: v.string(),

@@ -12,11 +12,12 @@ export default function Login() {
     <div className="flex">
       <Authenticated>
         <div className="flex gap-2 justify-center items-center">
-          <Link href="/admin">
-            <Button size="icon" variant="outline">
+          <Button size="icon" variant="outline" asChild>
+            <Link href="/admin">
               <Settings />
-            </Button>
-          </Link>
+            </Link>
+          </Button>
+
           <SignOutButton>
             <Button size="icon" variant="outline">
               <User />

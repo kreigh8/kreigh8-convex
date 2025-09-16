@@ -13,7 +13,7 @@ export default function Header() {
     <header>
       <nav className="sticky top-0 z-10 bg-background px-4 py-2 border-b-2 border-slate-200 dark:border-slate-800 flex flex-row justify-between items-center">
         <Link href="/">kreigh8</Link>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2">
           <ThemeToggle />
           <Login />
         </div>
