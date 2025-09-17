@@ -3,8 +3,7 @@ import ClientForm from '@/components/forms/ClientForm'
 
 export default function AddClientPage() {
   return (
-    <section className="container mx-auto">
-      <Breadcrumbs />
+    <section className="container mx-auto py-4">
       <ClientForm />
     </section>
   )

@@ -15,6 +15,11 @@ export default defineSchema({
     imageId: v.id('images'),
     active: v.boolean()
   }),
+  technologies: defineTable({
+    name: v.string(),
+    url: v.string(),
+    imageId: v.id('images')
+  }),
   messages: defineTable({
     author: v.string(),
     storageId: v.id('_storage')

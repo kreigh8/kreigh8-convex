@@ -21,9 +21,9 @@ import { useUser } from '@clerk/clerk-react'
 
 const formSchema = z.object({
   name: z.string().min(2, {
-    message: 'Client name must be at least 2 characters.'
+    message: 'Technology name must be at least 2 characters.'
   }),
-  url: z.url({ message: 'Client URL must be a valid URL.' }),
+  url: z.url({ message: 'Technology URL must be a valid URL.' }),
   image: z
     .instanceof(File)
     .refine(
@@ -36,13 +36,12 @@ const formSchema = z.object({
           'image/gif'
         ].includes(file.type),
       { message: 'Invalid image file type' }
-    ),
-  active: z.boolean()
+    )
 })
 
-export default function ClientForm() {
+export default function TechnologyForm() {
   const generateUploadUrl = useMutation(api.images.generateUploadUrl)
-  const createClient = useMutation(api.clients.createClient)
+  const createTechnology = useMutation(api.technologies.createTechnology)
 
   const { user } = useUser()
 
@@ -51,8 +50,7 @@ export default function ClientForm() {
     defaultValues: {
       name: '',
       url: '',
-      image: undefined as unknown as File,
-      active: false
+      image: undefined as unknown as File
     }
   })
 
@@ -71,15 +69,14 @@ export default function ClientForm() {
       })
       const { storageId } = await result.json()
 
-      await createClient({
+      await createTechnology({
         name: values.name,
         url: values.url,
         image: {
           storageId,
           author: user?.username || 'unknown',
           format: 'image'
-        },
-        active: values.active
+        }
       })
 
       form.reset()
@@ -97,7 +94,7 @@ export default function ClientForm() {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Client Name</FormLabel>
+              <FormLabel>Technology Name</FormLabel>
               <FormControl>
                 <Input placeholder="shadcn" {...field} />
               </FormControl>
@@ -113,7 +110,7 @@ export default function ClientForm() {
           name="url"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Client URL</FormLabel>
+              <FormLabel>Technology URL</FormLabel>
               <FormControl>
                 <Input placeholder="shadcn" {...field} />
               </FormControl>
@@ -127,23 +124,6 @@ export default function ClientForm() {
 
         <ImageUpload />
 
-        <FormField
-          control={form.control}
-          name="active"
-          render={({ field }) => {
-            return (
-              <FormItem>
-                <FormLabel className="text-sm font-normal">Active</FormLabel>
-                <FormControl>
-                  <Checkbox
-                    checked={field.value === true}
-                    onCheckedChange={(checked) => field.onChange(!!checked)}
-                  />
-                </FormControl>
-              </FormItem>
-            )
-          }}
-        />
         <Button type="submit">Submit</Button>
       </form>
     </Form>
