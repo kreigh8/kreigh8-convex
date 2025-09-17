@@ -1,7 +1,7 @@
 'use client'
 
 import { Authenticated, Unauthenticated } from 'convex/react'
-import { LogOut, Settings, User } from 'lucide-react'
+import { LogOut, Settings } from 'lucide-react'
 import SignInButton from './SignInButton'
 import Link from 'next/link'
 import { Button } from './ui/button'
