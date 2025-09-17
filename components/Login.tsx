@@ -1,7 +1,7 @@
 'use client'
 
 import { Authenticated, Unauthenticated } from 'convex/react'
-import { Settings, User } from 'lucide-react'
+import { LogOut, Settings, User } from 'lucide-react'
 import SignInButton from './SignInButton'
 import Link from 'next/link'
 import { Button } from './ui/button'
@@ -20,7 +20,7 @@ export default function Login() {
 
           <SignOutButton>
             <Button size="icon" variant="outline">
-              <User />
+              <LogOut />
             </Button>
           </SignOutButton>
         </div>
