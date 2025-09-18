@@ -26,7 +26,7 @@ export default function HomeBlurbForm(props: {
   preloadedHomeBlurb: Preloaded<typeof api.home.getHomeBlurb>
 }) {
   const createHomeBlurb = useMutation(api.home.createHomeBlurb)
-  const getHomeBlurb = usePreloadedQuery(props.preloadedHomeBlurb)[0]
+  const getHomeBlurb = usePreloadedQuery(props.preloadedHomeBlurb)
 
   console.log('getHomeBlurb', getHomeBlurb)
   const form = useForm<z.infer<typeof formSchema>>({

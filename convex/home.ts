@@ -33,7 +33,7 @@ export const getHomeBlurb = query({
     const homeBlurb = await ctx.db
       .query('home')
       // Ordered by _creationTime, return most recent
-      .collect()
+      .first()
 
     return homeBlurb
   }
