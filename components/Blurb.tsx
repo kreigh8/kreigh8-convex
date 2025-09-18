@@ -8,5 +8,5 @@ export default function HomeBlurb(props: {
 }) {
   const homeBlurb = usePreloadedQuery(props.preloadedHomeBlurb)
 
-  return <p>{homeBlurb?.homeBlurb}</p>
+  return <h3>{homeBlurb?.homeBlurb}</h3>
 }
