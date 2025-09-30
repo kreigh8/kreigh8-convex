@@ -8,7 +8,11 @@ export default function SignInButton() {
   const router = useRouter()
 
   return (
-    <Button size="icon" onClick={() => router.push('/sign-in')}>
+    <Button
+      variant="outline"
+      size="icon"
+      onClick={() => router.push('/sign-in')}
+    >
       <User />
     </Button>
   )
