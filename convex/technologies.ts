@@ -12,6 +12,11 @@ export const createTechnology = mutation({
     })
   },
   handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity()
+    if (identity === null) {
+      throw new Error('Not authenticated')
+    }
+
     // Insert image into images table
     const imageId = await ctx.db.insert('images', {
       body: args.image.storageId,

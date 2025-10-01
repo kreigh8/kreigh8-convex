@@ -6,6 +6,10 @@ export const createHomeBlurb = mutation({
     homeBlurb: v.string()
   },
   handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity()
+    if (identity === null) {
+      throw new Error('Not authenticated')
+    }
     // Insert image into images table
 
     const existingBlurb = await ctx.db.query('home').first()
